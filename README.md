@@ -1,4 +1,4 @@
-#Alaura
+# Alaura
 Sleek & lightweight music player made with Svelte amd Tauri
 
 # create-svelte
