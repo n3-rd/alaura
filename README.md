@@ -1,3 +1,6 @@
+#Alaura
+Sleek & lightweight music player made with Svelte amd Tauri
+
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
