@@ -1,12 +1,12 @@
 
 <script>
-	import '../app.postcss';
+	import FooterPlayer from '$lib/components/FooterPlayer.svelte';
+import '../app.postcss';
 
 	import { AppShell } from '@skeletonlabs/skeleton';
 </script>
 
 <AppShell>
-	<svelte:fragment slot="header">Header</svelte:fragment>
 	<svelte:fragment slot="sidebarLeft">Sidebar Left</svelte:fragment>
 	<!-- (sidebarRight) -->
 	<!-- (pageHeader) -->
@@ -14,5 +14,7 @@
 	<slot />
 	<!-- ---- / ---- -->
 	<!-- (pageFooter) -->
-	<svelte:fragment slot="footer">Footer</svelte:fragment>
+	<svelte:fragment slot="footer">
+		<FooterPlayer/>
+	</svelte:fragment>
 </AppShell>
