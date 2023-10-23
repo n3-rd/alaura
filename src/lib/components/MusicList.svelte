@@ -1,14 +1,10 @@
 <script>
 	import { listFiles } from "$lib/utility/libraryActions";
-	import { Avatar } from "@skeletonlabs/skeleton";
-	import { convertFileSrc } from "@tauri-apps/api/tauri";
-    // import { audioDir, join } from '@tauri-apps/api/path';
-    import { readBinaryFile, BaseDirectory } from '@tauri-apps/api/fs';
-	import { onMount } from "svelte";
-    // import Amplitude from 'amplitudejs'
-    import {Howl, Howler} from 'howler';
-    import { browser } from "$app/environment";
 	import { pause, playFile } from "$lib/utility/playerActions";
+	import FileDrop from 'svelte-tauri-filedrop'
+    import { initializeStores } from '@skeletonlabs/skeleton';
+
+initializeStores();
 
     let songs = [
         {
@@ -18,39 +14,7 @@
             album: 'Billion Dollar Baby',
             image: 'bdbaby'
         },
-        {
-            name: '+234',
-            artist: 'Seyi Vibez',
-            duration: '3:00',
-            album: 'Billion Dollar Baby',
-            image: 'bdbaby'
-        },
-         {
-            name: 'Terminator',
-            artist: 'Asake',
-            duration: '2:43',
-            album: 'Mr Money with the vibe',
-            image: 'mrmoney'
-        }, {
-            name: 'Damages',
-            artist: 'Tems',
-            duration: '3:20',
-            album: 'Damages',
-            image: 'damages'
-        }, {
-            name: 'Commander',
-            artist: 'Blaqbonez',
-            duration: '3:24',
-            album: 'Commander',
-            image: 'commander'
-        },
-        {
-            name: 'Lonely At The Top',
-            artist: 'Asake',
-            duration: '2:30',
-            album: 'Work Of Art',
-            image: 'workofart'
-        }    ]
+ ]
 
 
 const playMusic = async () => {
@@ -63,8 +27,33 @@ const playMusic = async () => {
     }, 6000);
 };
 
+	/**
+	 * @param {any} paths
+	 */
+function open(paths) {
+    console.log('paths', paths);
+  }
+
+  let fileDrag = false;
 </script>
-<table class="table table-hover rounded-none">
+
+
+{#if fileDrag}
+<FileDrop extensions={['mp3']} handleFiles={open} let:files>
+
+    <div class="dropzone z-[999] h-screen w-screen absolute bg-[#eee]" class:droppable={files.length > 0}
+
+        
+        >
+      <h2>Drop JSON files</h2>
+    </div>
+  </FileDrop>
+
+  {/if}
+<table class="table table-hover rounded-none"
+on:dragover={() => fileDrag = true}
+on:dragleave={() => fileDrag = false}
+>
     <thead>
         <tr>
             <th>Song</th>
@@ -91,3 +80,10 @@ const playMusic = async () => {
         {/each}
     </tbody>
 </table>
+
+  
+  <style>
+    .droppable {
+      background: #d6dff0;
+    }
+  </style>

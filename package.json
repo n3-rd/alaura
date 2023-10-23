@@ -39,6 +39,7 @@
     "@tauri-apps/api": "^1.5.1",
     "amplitudejs": "^5.3.2",
     "howler": "^2.2.4",
-    "path": "link:@tauri-apps/api/path"
+    "path": "link:@tauri-apps/api/path",
+    "svelte-tauri-filedrop": "^1.0.0"
   }
 }

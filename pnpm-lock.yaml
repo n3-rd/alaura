@@ -20,6 +20,9 @@ dependencies:
   path:
     specifier: link:@tauri-apps/api/path
     version: link:@tauri-apps/api/path
+  svelte-tauri-filedrop:
+    specifier: ^1.0.0
+    version: 1.0.0
 
 devDependencies:
   '@skeletonlabs/skeleton':
@@ -2099,6 +2102,12 @@ packages:
       svelte: 4.2.2
       typescript: 5.2.2
     dev: true
+
+  /svelte-tauri-filedrop@1.0.0:
+    resolution: {integrity: sha512-UYfsQvBc+KHpFdefqwLPc+i1iPWutH6Do1NcSkbarWHJT5U8WvMhJhbm6tIVuTf39DtryJbUomb+hwyJHJbevw==}
+    dependencies:
+      '@tauri-apps/api': 1.5.1
+    dev: false
 
   /svelte@4.2.2:
     resolution: {integrity: sha512-My2tytF2e2NnHSpn2M7/3VdXT4JdTglYVUuSuK/mXL2XtulPYbeBfl8Dm1QiaKRn0zoULRnL+EtfZHHP0k4H3A==}
