@@ -38,6 +38,7 @@
     "@floating-ui/dom": "1.5.3",
     "@tauri-apps/api": "^1.5.1",
     "amplitudejs": "^5.3.2",
+    "dexie": "4.0.1-beta.1",
     "howler": "^2.2.4",
     "path": "link:@tauri-apps/api/path",
     "svelte-tauri-filedrop": "^1.0.0"

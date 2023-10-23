@@ -1,5 +1,5 @@
 <script>
-	import { listFiles } from "$lib/utility/libraryActions";
+	import { listFiles, addFiles } from "$lib/utility/libraryActions";
 	import { pause, playFile } from "$lib/utility/playerActions";
 	import FileDrop from 'svelte-tauri-filedrop'
     import { initializeStores } from '@skeletonlabs/skeleton';
@@ -31,7 +31,9 @@ const playMusic = async () => {
 	 * @param {any} paths
 	 */
 function open(paths) {
-    console.log('paths', paths);
+    paths.forEach((/** @type {any} */ path) => {
+      addFiles(path);
+    });
   }
 
   let fileDrag = false;
