@@ -1,6 +1,6 @@
 <script>
 	import { ProgressBar } from "@skeletonlabs/skeleton";
-    import {HeartOutline, Megaphone, MegaphoneOutline, Pause, Play, Repeat, Shuffle, VolumeHigh, VolumeMedium} from "svelte-ionicons";
+    import {HeartOutline, Megaphone, MegaphoneOutline, Pause, Play, PlaySkipBack, PlaySkipForward, Repeat, Shuffle, VolumeHigh, VolumeMedium} from "svelte-ionicons";
 </script>
 <div class="h-20 border-t border-gray-700">
 <div class="w-full h-full flex justify-between items-center">
@@ -13,10 +13,9 @@
         <div class="timer">1:30 / 2:47</div>
     </div>
     <div class="actions w-[23%] flex justify-around">
-        <HeartOutline class="w-8 h-8 text-gray-500"/>
-        <Shuffle class="w-8 h-8 text-gray-500"/>
-        <Repeat class="w-8 h-8 text-gray-500"/>
-        <VolumeMedium class="w-8 h-8 text-gray-500"/>
+        <PlaySkipBack class="w-8 h-8 text-gray-500 hover:text-gray-300 cursor-pointer"/>
+        <Play class="w-8 h-8 text-gray-500 hover:text-gray-300 cursor-pointer"/>
+        <PlaySkipForward class="w-8 h-8 text-gray-500 hover:text-gray-300 cursor-pointer"/>
 
     </div>
 </div>
