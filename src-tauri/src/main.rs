@@ -6,7 +6,6 @@ use id3::{Tag, TagLike};
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::fs::File;
-use tauri::generate_handler;
 
 // Also in main.rs
 fn main() {
@@ -39,6 +38,9 @@ struct Metadata {
     title: Option<String>,
     artist: Option<String>,
     album: Option<String>,
+    duration: Option<String>,
+    year: Option<i32>,
+    picture: Option<Vec<u8>>
 }
 
 #[tauri::command]
@@ -49,10 +51,18 @@ fn get_audio_metadata(file_path: String) -> Result<Metadata, String> {
     let title = tag.title().map(|s| s.to_string());
     let artist = tag.artist().map(|s| s.to_string());
     let album = tag.album().map(|s| s.to_string());
+    let duration = tag.duration().map(|d| d.to_string());
+    let year = tag.year().map(|y| y as i32);
+
+     // get picture
+     let picture = tag.pictures().next().map(|p| p.data.to_vec());
 
     Ok(Metadata {
         title,
         artist,
         album,
+        duration,
+        year,
+        picture
     })
 }

@@ -1,31 +1,32 @@
 <script>
-	import { listFiles, addFiles } from "$lib/utility/libraryActions";
+	import { listFiles, addFiles, sanitizeFileName } from "$lib/utility/libraryActions";
 	import { pause, playFile } from "$lib/utility/playerActions";
 	import FileDrop from 'svelte-tauri-filedrop'
     import { initializeStores } from '@skeletonlabs/skeleton';
-
+    import { liveQuery } from "dexie";
+    import {db } from '$lib/databases/songs';
+    import { appDataDir, join } from '@tauri-apps/api/path';
+    import { convertFileSrc } from '@tauri-apps/api/tauri';
 initializeStores();
 
-    let songs = [
-        {
-            name: 'Bd Baby',
-            artist: 'Seyi Vibez',
-            duration: '3:00',
-            album: 'Billion Dollar Baby',
-            image: 'bdbaby'
-        },
- ]
 
+	/**
+	 * @type {any[]}
+	 */
+let songs = [];
+
+liveQuery(() => db.songs.toArray()).subscribe((value) => {
+  songs = value;
+});
 
 const playMusic = async () => {
   let files = await listFiles();
   console.log('files', files);
-    playFile(files[3]);
+  playFile(files[4]);
 
-    setTimeout(() => {
-        pause();
-    }, 6000);
 };
+
+
 
 	/**
 	 * @param {any} paths
@@ -37,6 +38,16 @@ function open(paths) {
   }
 
   let fileDrag = false;
+
+  const loadImage =async(/** @type {string} */ e)=>{
+        const appDataDirPath = await appDataDir();
+       let sanitizedName = sanitizeFileName(e);
+      const filePath = await join(appDataDirPath, `${sanitizedName}.png`);
+      console.log('filePath', filePath);
+      const assetUrl = convertFileSrc(filePath);
+      return assetUrl;
+  }
+  
 </script>
 
 
@@ -67,18 +78,21 @@ on:dragleave={() => fileDrag = false}
 
     <tbody>
         {#each songs as song}
+        {#await loadImage(song.title + song.artist) then artworkUrl}
             <tr class="cursor-pointer" 
             on:click={() => playMusic()}
             >
                 <td class="flex gap-3 items-center">
                     <!-- <Avatar src={`/img/${song.image}.png`} width="w-12" rounded="rounded-xl" /> -->
-                    <img src={`/img/${song.image}.png`} class="w-12 rounded-xl" alt="">
-                    <div class="font-bold">{song.name}</div>
+                    <img src={artworkUrl} class="w-12 rounded-xl" alt="">
+                    <div class="font-bold">{song.title}</div>
                 </td>
                 <td>{song.artist}</td>
-                <td>{song.duration}</td>
+                <!-- <td>{song.duration}</td> -->
+                <td>3:00</td>
                 <td>{song.album}</td>
             </tr>
+            {/await}
         {/each}
     </tbody>
 </table>

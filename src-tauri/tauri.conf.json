@@ -50,14 +50,15 @@
           "$RESOURCE/*",
           "$APP/*",
           "$LOG/*",
-          "$TEMP/*"
+          "$TEMP/*",
+          "$APPDATA/thumbnails"
         ]
       },
       "protocol": {
         "all": true,
         "asset": true,
-        "assetScope": ["**"]
-      },
+        "assetScope": ["**", "$HOME/.local/share/com.tauri.dev/*.png"]
+      },      
       "path": {
         "all": true
       }
@@ -96,7 +97,7 @@
       }
     },
     "security": {
-      "csp": "default-src 'self'; media-src 'self' asset: https://asset.localhost;"
+      "csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost;"
     },
     "updater": {
       "active": false
