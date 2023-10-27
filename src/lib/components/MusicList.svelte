@@ -1,12 +1,11 @@
 <script>
-	import { addFiles, sanitizeFileName } from "$lib/utility/libraryActions";
-	import { pause, playFile } from "$lib/utility/playerActions";
+	import { addFiles, loadImage, sanitizeFileName } from "$lib/utility/libraryActions";
+	import { playFile } from "$lib/utility/playerActions";
 	import FileDrop from 'svelte-tauri-filedrop'
     import { initializeStores } from '@skeletonlabs/skeleton';
     import { liveQuery } from "dexie";
     import {db } from '$lib/databases/songs';
-    import { appDataDir, join } from '@tauri-apps/api/path';
-    import { convertFileSrc } from '@tauri-apps/api/tauri';
+
 initializeStores();
 
 
@@ -20,11 +19,9 @@ liveQuery(() => db.songs.toArray()).subscribe((value) => {
   songs = value;
 });
 
-const playMusic = async (e)=>{
-  console.log('playMusic', e);
-  playFile(e);
+const playMusic = async (/** @type {String} */ e, /** @type {String} */ title, /** @type {String} */ artist, /** @type {String} */ album)=>{
+  playFile(e, title, artist, album);
 }
-
 
 
 	/**
@@ -38,14 +35,7 @@ function open(paths) {
 
   let fileDrag = false;
 
-  const loadImage =async(/** @type {string} */ e)=>{
-        const appDataDirPath = await appDataDir();
-       let sanitizedName = sanitizeFileName(e);
-      const filePath = await join(appDataDirPath, `${sanitizedName}.png`);
-      console.log('filePath', filePath);
-      const assetUrl = convertFileSrc(filePath);
-      return assetUrl;
-  }
+  
   
 </script>
 
@@ -79,7 +69,7 @@ on:dragleave={() => fileDrag = false}
         {#each songs as song}
         {#await loadImage(song.title + song.artist) then artworkUrl}
             <tr class="cursor-pointer" 
-            on:click={() => playMusic(song.fileName)}
+            on:click={() => playMusic(song.fileName, song.title, song.artist, song.album)}
             >
                 <td class="flex gap-3 items-center">
                     <img src={artworkUrl} class="w-12 rounded-xl" alt="">

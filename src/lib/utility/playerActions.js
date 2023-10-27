@@ -1,12 +1,29 @@
+import { currentPlaying } from '$lib/stores/currentPlaying';
 import { readBinaryFile, BaseDirectory } from '@tauri-apps/api/fs';
 import { Howl, Howler } from 'howler';
+import { sanitizeFileName } from './libraryActions';
 
 /**
  * @type {Howl}
  */
 export let sound;
 
-export const playFile = async (/** @type {string} */ file) => {
+export const playFile = async (
+	/** @type {string} */ file,
+	/** @type {any} */ title,
+	/** @type {any} */ artist,
+	/** @type {any} */ album
+) => {
+	console.log('playFile', file, title, artist, album);
+	currentPlaying.update((current) => {
+		return {
+			...current,
+			title: title,
+			artist: artist,
+			album: album,
+			artwork: sanitizeFileName(title + artist)
+		};
+	});
 	Howler.unload();
 	const contents = await readBinaryFile(file, { dir: BaseDirectory.Audio });
 	console.log('contents', contents);

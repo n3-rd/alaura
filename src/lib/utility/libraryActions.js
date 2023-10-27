@@ -2,6 +2,8 @@ import { invoke } from '@tauri-apps/api/tauri';
 // @ts-ignore
 import { db } from '$lib/databases/songs';
 import { writeBinaryFile, BaseDirectory } from '@tauri-apps/api/fs';
+import { appDataDir, join } from '@tauri-apps/api/path';
+import { convertFileSrc } from '@tauri-apps/api/tauri';
 
 export const listFiles = async () => {
 	let files = await invoke('get_audio_files');
@@ -67,4 +69,13 @@ export let savePicture = async (
 export let sanitizeFileName = (/** @type {string} */ str) => {
 	// Replace any characters that are not alphanumeric, dashes, or underscores with underscores
 	return str.replace(/[^a-zA-Z0-9-_]/g, '_');
+};
+
+export const loadImage = async (/** @type {string} */ e) => {
+	const appDataDirPath = await appDataDir();
+	let sanitizedName = sanitizeFileName(e);
+	const filePath = await join(appDataDirPath, `${sanitizedName}.png`);
+	console.log('filePath', filePath);
+	const assetUrl = convertFileSrc(filePath);
+	return assetUrl;
 };
