@@ -1,5 +1,5 @@
 <script>
-	import { listFiles, addFiles, sanitizeFileName } from "$lib/utility/libraryActions";
+	import { addFiles, sanitizeFileName } from "$lib/utility/libraryActions";
 	import { pause, playFile } from "$lib/utility/playerActions";
 	import FileDrop from 'svelte-tauri-filedrop'
     import { initializeStores } from '@skeletonlabs/skeleton';
@@ -15,16 +15,15 @@ initializeStores();
 	 */
 let songs = [];
 
+// @ts-ignore
 liveQuery(() => db.songs.toArray()).subscribe((value) => {
   songs = value;
 });
 
-const playMusic = async () => {
-  let files = await listFiles();
-  console.log('files', files);
-  playFile(files[4]);
-
-};
+const playMusic = async (e)=>{
+  console.log('playMusic', e);
+  playFile(e);
+}
 
 
 
@@ -80,10 +79,9 @@ on:dragleave={() => fileDrag = false}
         {#each songs as song}
         {#await loadImage(song.title + song.artist) then artworkUrl}
             <tr class="cursor-pointer" 
-            on:click={() => playMusic()}
+            on:click={() => playMusic(song.fileName)}
             >
                 <td class="flex gap-3 items-center">
-                    <!-- <Avatar src={`/img/${song.image}.png`} width="w-12" rounded="rounded-xl" /> -->
                     <img src={artworkUrl} class="w-12 rounded-xl" alt="">
                     <div class="font-bold">{song.title}</div>
                 </td>
