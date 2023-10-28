@@ -1,5 +1,5 @@
 <script>
-	import { pause, resume, isPlaying } from "$lib/utility/playerActions";
+	import { pause, resume, isPlaying, playPreviousSong, playNextSong } from "$lib/utility/playerActions";
     import {Pause, Play, PlaySkipBack, PlaySkipForward} from "svelte-ionicons";
    /**
 	 * @type {boolean}
@@ -14,7 +14,11 @@
 
 </script>
 <div class="actions w-[23%] flex justify-around">
-    <PlaySkipBack class="w-8 h-8 text-gray-500 hover:text-gray-300 cursor-pointer"/>
+    <button
+    on:click={playPreviousSong}
+    >
+        <PlaySkipBack class="w-8 h-8 text-gray-500 hover:text-gray-300 cursor-pointer"/>
+    </button>
 
     {#if soundPlaying}
     <button
@@ -29,6 +33,11 @@
     <Play class="w-8 h-8 text-gray-500 hover:text-gray-300 cursor-pointer"/>
     </button>
     {/if}
+    <button
+    on:click={playNextSong}
+    >
     <PlaySkipForward class="w-8 h-8 text-gray-500 hover:text-gray-300 cursor-pointer"/>
+
+    </button>
 
 </div>

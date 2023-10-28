@@ -19,8 +19,8 @@ liveQuery(() => db.songs.toArray()).subscribe((value) => {
   songs = value;
 });
 
-const playMusic = async (/** @type {String} */ e, /** @type {String} */ title, /** @type {String} */ artist, /** @type {String} */ album)=>{
-  playFile(e, title, artist, album);
+const playMusic = async (/** @type {String} */ e, /** @type {String} */ title, /** @type {String} */ artist, /** @type {String} */ album, /** @type {number} */ id)=>{
+  playFile(e, title, artist, album, id);
 }
 
 
@@ -69,7 +69,7 @@ on:dragleave={() => fileDrag = false}
         {#each songs as song}
         {#await loadImage(song.title + song.artist) then artworkUrl}
             <tr class="cursor-pointer" 
-            on:click={() => playMusic(song.fileName, song.title, song.artist, song.album)}
+            on:click={() => playMusic(song.fileName, song.title, song.artist, song.album, song.id)}
             >
                 <td class="flex gap-3 items-center">
                     <img src={artworkUrl} class="w-12 rounded-xl" alt="">

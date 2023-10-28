@@ -75,7 +75,12 @@ export const loadImage = async (/** @type {string} */ e) => {
 	const appDataDirPath = await appDataDir();
 	let sanitizedName = sanitizeFileName(e);
 	const filePath = await join(appDataDirPath, `${sanitizedName}.png`);
-	console.log('filePath', filePath);
 	const assetUrl = convertFileSrc(filePath);
 	return assetUrl;
+};
+
+export const listAllSongs = async () => {
+	// @ts-ignore
+	let songs = await db.songs.toArray();
+	console.log(songs);
 };

@@ -6,3 +6,5 @@ export const currentPlaying = writable({
 	album: 'No album',
 	artwork: 'No cover'
 });
+
+export const currentSongId = writable(0);
