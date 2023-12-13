@@ -19,6 +19,7 @@ export const addFiles = async (/** @type {any} */ file) => {
 	let duration = metaData.duration;
 	let year = metaData.year;
 	let picture = metaData.picture;
+	let filePath = file;
 
 	const pushSong = async () => {
 		try {
@@ -30,7 +31,8 @@ export const addFiles = async (/** @type {any} */ file) => {
 				title: title,
 				fileName: fileName,
 				duration: duration,
-				year: year
+				year: year,
+				filePath: filePath
 			});
 
 			const sanitizedFileName = sanitizeFileName(title + artist);
@@ -53,7 +55,8 @@ export let getAudioMetadata = async (/** @type {any} */ file) => {
 		title: metadata.title,
 		duration: metadata.duration,
 		year: metadata.year,
-		picture: metadata.picture
+		picture: metadata.picture,
+		filePath: file
 	};
 };
 
@@ -83,4 +86,8 @@ export const listAllSongs = async () => {
 	// @ts-ignore
 	let songs = await db.songs.toArray();
 	console.log(songs);
+};
+
+export const formatArtist = (/** @type {string} */ artist) => {
+	return artist.replace(/\0/g, ', ');
 };

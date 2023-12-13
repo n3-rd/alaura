@@ -10,8 +10,6 @@
        soundPlaying = isPlaying();
    }, 100);
 
-
-
 </script>
 <div class="actions w-[23%] flex justify-around">
     <button

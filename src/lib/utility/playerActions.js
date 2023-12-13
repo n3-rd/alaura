@@ -5,10 +5,6 @@ import { sanitizeFileName } from './libraryActions';
 import { db } from '$lib/databases/songs';
 import { get } from 'svelte/store';
 
-const i = get(currentSongId);
-console.log('i', i);
-console.log('currentPlaying1', get(currentSongId));
-
 /**
  * @type {Howl}
  */
@@ -19,9 +15,13 @@ export const playFile = async (
 	/** @type {any} */ title,
 	/** @type {any} */ artist,
 	/** @type {any} */ album,
-	/** @type {any} */ id
+	/** @type {any} */ id,
+	/** @type {any} */ filePath
 ) => {
+	Howler.unload();
+
 	console.log('playFile', id);
+	console.log('filePath', filePath);
 	currentPlaying.update((current) => {
 		return {
 			...current,
@@ -32,32 +32,43 @@ export const playFile = async (
 		};
 	});
 	currentSongId.set(id);
-
-	console.log('currentPlaying2', get(currentSongId));
 	Howler.unload();
+
 	const contents = await readBinaryFile(file, { dir: BaseDirectory.Audio });
 	console.log('contents', contents);
 	const blob = new Blob([new Uint8Array(contents)], { type: 'audio/wav' });
+	// make the blob faster
+	// @ts-ignore
 
 	sound = new Howl({
 		src: [window.URL.createObjectURL(blob)],
 		format: ['mp3'],
 		html5: true,
+		// sprite: { __default: [0, 20000, true] },
 		preload: true,
-		onend: async () => {
+		onend: async (e) => {
 			await playNextSong();
+			console.log(e);
+		},
+		onloaderror: (id, err) => {
+			console.error('Error loading sound:', err);
+		},
+		onplayerror: (id, err) => {
+			console.error('Error playing sound:', err);
 		}
 	});
 	sound.play();
 };
 
 export const playNextSong = async () => {
+	Howler.unload();
 	let currentSongIndex = get(currentSongId);
-	console.log('currentSongId', currentSongIndex);
 	const nextSongId = currentSongIndex + 1;
 	// @ts-ignore
 	const nextSong = await db.songs.get(nextSongId);
 	if (nextSong) {
+		Howler.unload();
+
 		await playFile(nextSong.fileName, nextSong.title, nextSong.artist, nextSong.album, nextSong.id);
 	} else {
 		console.log(`Song ${nextSongId} not found. Skipping to next song.`);
@@ -66,12 +77,16 @@ export const playNextSong = async () => {
 };
 
 export const playPreviousSong = async () => {
+	Howler.unload();
+
 	let currentSongIndex = get(currentSongId);
 	console.log('currentSongId', currentSongIndex);
 	const previousSongId = currentSongIndex - 1;
 	// @ts-ignore
 	const previousSong = await db.songs.get(previousSongId);
 	if (previousSong) {
+		Howler.unload();
+
 		await playFile(
 			previousSong.fileName,
 			previousSong.title,
