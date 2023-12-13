@@ -1,5 +1,6 @@
 import { readDir, BaseDirectory } from '@tauri-apps/api/fs';
 import { addFiles } from './libraryActions';
+import { db } from '$lib/databases/songs';
 
 // Function to get file extension
 const getFileExtension = (/** @type {string | string[]} */ filename) => {
@@ -23,9 +24,14 @@ export const readAudioFiles = async () => {
 		}
 	}
 
-	files.forEach((file) => {
+	for (const file of files) {
 		console.log(file.path);
-		addFiles(file.path);
-	});
+		// Check if the file exists in the database
+		// @ts-ignore
+		const exists = await db.songs.where('filePath').equals(file.path).count();
+		if (!exists) {
+			addFiles(file.path);
+		}
+	}
 	return files;
 };
